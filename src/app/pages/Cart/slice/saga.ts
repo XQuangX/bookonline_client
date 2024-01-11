@@ -74,10 +74,16 @@ function* removeProductInCart(
       action.payload.customerId
     );
     if (result) {
-      const totalProductsInCart = result.products.length;
-      yield put(actions.getCartDetailSuccess(result));
-      yield put(actions.setTotalProductInCart(totalProductsInCart));
-      action.meta();
+      if (typeof result === "string") {
+        yield put(actions.getCartDetailSuccess(undefined));
+        yield put(actions.setTotalProductInCart(0));
+        action.meta();
+      }else{
+        const totalProductsInCart = result.products.length;
+        yield put(actions.getCartDetailSuccess(result));
+        yield put(actions.setTotalProductInCart(totalProductsInCart));
+        action.meta();
+      }
     } else {
       action.meta();
     }
